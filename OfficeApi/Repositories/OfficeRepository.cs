@@ -20,7 +20,7 @@ namespace OfficeApi.Repositories
             {
                 office.Id = Guid.NewGuid();
 
-                db.Query(query, office);
+                await db.QueryAsync(query, office);
             }
             return office;
         }
@@ -31,7 +31,7 @@ namespace OfficeApi.Repositories
 
             using (IDbConnection db = new SqlConnection(_conStr))
             {
-                db.Query(query, id);
+                await db.QueryAsync(query, id);
             }
         }
 
@@ -42,7 +42,7 @@ namespace OfficeApi.Repositories
 
             using (IDbConnection db = new SqlConnection(_conStr))
             {
-                offices = db.Query<Office>(query);
+                offices = await db.QueryAsync<Office>(query);
             }
             return offices;
         }
@@ -54,7 +54,8 @@ namespace OfficeApi.Repositories
 
             using (IDbConnection db = new SqlConnection(_conStr))
             {
-                office = db.Query(query, id).FirstOrDefault();
+                var offices = await db.QueryAsync(query, id);
+                office = offices.FirstOrDefault();
             }
             return office;
         }
@@ -65,7 +66,7 @@ namespace OfficeApi.Repositories
 
             using (IDbConnection db = new SqlConnection(_conStr))
             {
-                db.Query(query, office);
+                await db.QueryAsync(query, office);
             }
             return office;
         }
