@@ -1,3 +1,6 @@
+using OfficeApi.Interfaces;
+using OfficeApi.Repositories;
+
 namespace OfficeApi
 {
     public class Program
@@ -5,9 +8,16 @@ namespace OfficeApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddControllers();
+
+            var conStr = builder.Configuration.GetConnectionString("OfficeApiDB");
+            builder.Services.AddTransient<IOfficeRepository, OfficeRepository>(provider => new OfficeRepository(conStr));
+
             var app = builder.Build();
 
-            app.MapGet("/", () => "Hello World!");
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller}/{action}");
 
             app.Run();
         }

@@ -1,0 +1,18 @@
+services:
+  officeapi:
+    image: ${DOCKER_REGISTRY-}officeapi
+    build:
+      context: .
+      dockerfile: OfficeApi/Dockerfile
+  officeapiDb:
+    restart: always
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Secret1_
+    ports:
+      - 1435:1433
+    volumes:
+      - officeapi-db-data:/var/opt/mssql
+volumes:
+  officeapi-db-data:
