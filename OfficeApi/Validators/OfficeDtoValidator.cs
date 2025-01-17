@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using OfficeApi.Domain;
+using OfficeApi.DTOs;
 
 namespace OfficeApi.Validators
 {
-    public class OfficeValidator : AbstractValidator<Office>
+    public class OfficeDtoValidator : AbstractValidator<OfficeDto>
     {
-        public OfficeValidator()
+        public OfficeDtoValidator()
         {
             RuleFor(o => o.City)
                 .NotEmpty().WithMessage("City is Required")

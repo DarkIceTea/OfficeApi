@@ -21,7 +21,7 @@ namespace OfficeApi
             builder.Services.AddTransient<IOfficeRepository, OfficeRepository>(provider => new OfficeRepository(conStr));
 
             builder.Services.AddFluentValidationAutoValidation();
-            builder.Services.AddValidatorsFromAssemblyContaining<OfficeValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<OfficeDtoValidator>();
 
             var app = builder.Build();
 
