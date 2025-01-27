@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using OfficeApi.Domain;
 using OfficeApi.DTOs;
 using OfficeApi.Interfaces;
@@ -7,7 +8,7 @@ namespace OfficeApi.Controllers
 {
     [ApiController]
     [Route("api/office")]
-    public class OfficeController(IOfficeRepository offRep) : Controller
+    public class OfficeController(IOfficeRepository offRep, IMemoryCache cache) : Controller
     {
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] OfficeDto officeDto, CancellationToken token)
@@ -52,7 +53,13 @@ namespace OfficeApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken token)
         {
-            return Ok(await offRep.GetAllAsync(token));
+            IEnumerable<Office>? offices;
+            if (cache.TryGetValue("GetAll", out offices))
+                return Ok(offices.ToList());
+
+            offices = await offRep.GetAllAsync(token);
+            cache.Set("GetAll", offices);
+            return Ok(offices.ToList());
         }
 
         [HttpDelete]

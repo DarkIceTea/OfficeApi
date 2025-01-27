@@ -23,6 +23,8 @@ namespace OfficeApi
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<OfficeDtoValidator>();
 
+            builder.Services.AddMemoryCache();
+
             var app = builder.Build();
 
             app.MapControllerRoute(
