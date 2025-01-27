@@ -20,18 +20,18 @@ namespace OfficeApi.Repositories
             {
                 office.Id = Guid.NewGuid();
 
-                db.Query(query, office);
+                await db.QueryAsync(query, office);
             }
             return office;
         }
 
         public async Task DeleteByIdAsync(Guid id, CancellationToken token)
         {
-            string query = "DELETE FROM Offices WHERE Id = '@id';";
+            string query = "DELETE FROM Offices WHERE Id = @id";
 
             using (IDbConnection db = new SqlConnection(_conStr))
             {
-                db.Query(query, id);
+                await db.QueryAsync(query, new { Id = id });
             }
         }
 
@@ -42,19 +42,19 @@ namespace OfficeApi.Repositories
 
             using (IDbConnection db = new SqlConnection(_conStr))
             {
-                offices = db.Query<Office>(query);
+                offices = await db.QueryAsync<Office>(query);
             }
             return offices;
         }
 
         public async Task<Office> GetByIdAsync(Guid id, CancellationToken token)
         {
-            string query = "SELECT o FROM Offices WHERE o.Id = '@Id'";
+            string query = "SELECT * FROM Offices WHERE Id = @Id";
             Office office;
 
             using (IDbConnection db = new SqlConnection(_conStr))
             {
-                office = db.Query(query, id).FirstOrDefault();
+                office = await db.QueryFirstOrDefaultAsync<Office>(query, new { Id = id });
             }
             return office;
         }
@@ -65,7 +65,7 @@ namespace OfficeApi.Repositories
 
             using (IDbConnection db = new SqlConnection(_conStr))
             {
-                db.Query(query, office);
+                await db.QueryAsync(query, office);
             }
             return office;
         }
